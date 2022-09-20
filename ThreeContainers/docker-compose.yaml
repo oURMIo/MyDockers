@@ -23,6 +23,5 @@
     container_name: certbotThree
     volumes:
       - VolumeThree:/Volum:rw
-      - ./things/nginx/www:/Volum/nginx/www
-      - ./things/certbot:/etc/letsencrypt
-    command: [cp /var/log/letsencrypt/letsencrypt.log /Volum/letsencrypt.log]
+      - ./things/nginx/www/index.html:/Volum/nginx/www/index.html
+      - ./things/certbot/hs.sh:/etc/letsencrypt/hs.sh
