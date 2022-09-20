@@ -12,7 +12,7 @@
       - etc-letsencrypt:/etc/letsencrypt
   
   server:
-    image: centos:stable-alpine
+    image: centos:latest
     container_name: centos
     volumes:
       - VolumeThree:/Volum:rw
@@ -20,7 +20,7 @@
     command: [/Volum/nginx/www/scr/script]
   
   certbot:
-    image: certbot/certbot:stable-alpine
+    image: certbot/certbot:latest
     depends_on:
       - nginx
     container_name: certbotThree
