@@ -1,7 +1,7 @@
 # services:  
   nginx:
     image: nginx:stable-alpine
-    container_name: nginxThree
+    container_name: nginx
     ports:
       - "8080:80"
       - "8443:443"
@@ -9,19 +9,26 @@
       - VolumeThree:/Volum:rw
       - ./things/nginx/www/index.html:/Volum/nginx/www/index.html
       - ./things/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - etc-letsencrypt:/etc/letsencrypt
   
   server:
-    image: centos:latest
-    container_name: centosThree
+    image: centos:stable-alpine
+    container_name: centos
     volumes:
       - VolumeThree:/Volum:rw
       - ./things/nginx/script:/Volum/nginx/www/scr/script
     command: [/Volum/nginx/www/scr/script]
   
   certbot:
-    image: certbot/certbot:latest
+    image: certbot/certbot:stable-alpine
+    depends_on:
+      - nginx
     container_name: certbotThree
     volumes:
       - VolumeThree:/Volum:rw
       - ./things/nginx/www/index.html:/Volum/nginx/www/index.html
-      - ./things/certbot/hs.sh:/etc/letsencrypt/hs.sh
+      - etc-letsencrypt:/etc/letsencrypt
+    command: certonly --webroot --webroot-path=/Volum/nginx/www/ --email urmi.98.ru@gmail.com --agree-tos --no-eff-email -d chserv.ddns.net
+
+volumes:
+  etc-letsencrypt:
