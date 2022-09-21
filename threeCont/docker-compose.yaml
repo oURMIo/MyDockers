@@ -1,0 +1,31 @@
+# services: 
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - volume:/volum:rw
+      - ./things/nginx/www/index.html:/volum/nginx/www/index.html
+      - ./things/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./things/certbot/*:/etc/letsencrypt/*
+  
+  server:
+    image: centos:latest
+    container_name: centos
+    volumes:
+      - volume:/volum:rw
+      - ./things/nginx/scripts/script:/volum/nginx/www/scripts/script
+    command: [/volum/nginx/www/scripts/script]
+  
+  certbot:
+    image: certbot/certbot:latest
+    depends_on:
+      - nginx
+    container_name: certbot
+    volumes:
+      - Volume:/volum:rw
+      - ./things/nginx/www/index.html:/volum/nginx/www/index.html
+      - ./things/certbot/*:/etc/letsencrypt/*
+    command: [certbot certonly --webroot --webroot-path=/volum/nginx/www --email urmi.98.ru@gmail.com --agree-tos --no-eff-email -d chserv.ddns.net]

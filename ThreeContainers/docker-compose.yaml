@@ -1,10 +1,10 @@
-# services:  
+services:  
   nginx:
     image: nginx:stable-alpine
     container_name: nginx
     ports:
-      - "8080:80"
-      - "8443:443"
+      - "80:80"
+      - "443:443"
     volumes:
       - VolumeThree:/Volum:rw
       - ./things/nginx/www/index.html:/Volum/nginx/www/index.html
@@ -21,11 +21,11 @@
   
   certbot:
     image: certbot/certbot:latest
-    depends_on:
-      - nginx
+    # depends_on:
+    #   - nginx
     container_name: certbotThree
     volumes:
       - VolumeThree:/Volum:rw
       - ./things/nginx/www/index.html:/Volum/nginx/www/index.html
+      - etc-letsencrypt:/etc/letsencrypt
     command: certonly --webroot --webroot-path=/Volum/nginx/www/ --email urmi.98.ru@gmail.com --agree-tos --no-eff-email -d chserv.ddns.net
-    command: [cp -r /etc/letsencrypt /Volum/nginx/www/ssl/]
