@@ -12,7 +12,8 @@ services:
       - ./things/nginx/www:/volum/nginx/www
       - ./things/nginx:/etc/nginx/conf.d
       - ./things/certbot:/etc/letsencrypt
-  server:
+  
+  centos:
     image: centos:latest
     container_name: centos
     volumes:
@@ -29,7 +30,8 @@ services:
       - volume:/volum:rw
       - ./things/nginx/www:/var/www/certbot
       - ./things/certbot:/etc/letsencrypt
-    command: [/etc/letsencrypt/scriptcertbot]
+    command: [/etc/letsencrypt/scriptcertbot.sh]
+
 volumes:
   volume:
 
