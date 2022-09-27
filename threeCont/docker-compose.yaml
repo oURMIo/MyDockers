@@ -1,6 +1,6 @@
 version: '3'
 
-services: 
+services:
   nginx:
     image: nginx:stable-alpine
     container_name: nginx
@@ -19,16 +19,17 @@ services:
       - volume:/volum:rw
       - ./things/nginx/scripts:/volum/nginx/www/scripts
     command: [/volum/nginx/www/scripts/script]
-  
+
   certbot:
     image: certbot/certbot:latest
     depends_on:
       - nginx
     container_name: certbot
     volumes:
-      - Volume:/volum:rw
-      - ./things/nginx/www:/volum/nginx/www
+      - volume:/volum:rw
+      - ./things/nginx/www:/var/www/certbot
       - ./things/certbot:/etc/letsencrypt
-    command: certonly --webroot --webroot-path=/volum/nginx/www --email urmi.98.ru@gmail.com --agree-tos --no-eff-email -d chserv.ddns.net
+    command: [/etc/letsencrypt/scriptcertbot]
 volumes:
   volume:
+
