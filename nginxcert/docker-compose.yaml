@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    ports:
+      - "8080:80"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - volum:/volum:rw
+      - ./things/nginx/www:/volum/nginx/www
+      - ./things/nginx/conf.d:/etc/nginx/conf.d
+      - ./things/certbot:/etc/letsencrypt
+
+  certbot:
+    image: certbot/certbot
+    depends_on:
+      - nginx
+    container_name: certbot
+    volumes:
+      - volum:/volum:rw
+      - ./things/nginx/www:/var/www
+      - ./things/certbot:/etc/letsencrypt
+    command: [certbot certonly --webroot -w /var/www --email urmi.98.ru@gmail.com -d dachserv.ddns.net --rsa-key-size 4096  --agree-tos --force-renewal]
+
+volumes:
+  volum:
